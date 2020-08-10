@@ -13,3 +13,8 @@ A Prometheus exporter for an Oregon Scientific IDTW211R indoor/outdoor bluetooth
 
 * `sudo hcitool lescan`
 * Look for `<BLE ADDRESS> IDTW211R`
+
+## Credits
+
+* Based on: [raspberry-pi-bluetooth-temperature](https://github.com/sighmon/raspberry-pi-bluetooth-temperature)
+* From: [Arnø](https://www.instructables.com/id/Connect-Raspberry-Pi-to-Oregon-Scientific-BLE-Weat/)
