@@ -201,23 +201,23 @@ if __name__=="__main__":
 		logging.debug('No WeatherStation in range !')
 	else:
 		try:
-            while True:
-                # Attempting to connect to device with MAC address "weatherStationMacAddr"
-                weatherStation = WeatherStation(weatherStationMacAddr)
-                
-                if weatherStation.monitorWeatherStation() is not None:
-                    # WeatherStation data received
-                    indoor = weatherStation.getIndoorTemp()
-                    outdoor = weatherStation.getOutdoorTemp()
+			while True:
+				# Attempting to connect to device with MAC address "weatherStationMacAddr"
+				weatherStation = WeatherStation(weatherStationMacAddr)
+				
+				if weatherStation.monitorWeatherStation() is not None:
+					# WeatherStation data received
+					indoor = weatherStation.getIndoorTemp()
+					outdoor = weatherStation.getOutdoorTemp()
 
-                    # Set Prometheus data
-                    TEMPERATURE_INDOORS.set(indoor)
-                    TEMPERATURE_OUTDOORS.set(outdoor)
-                else:
-                    logging.debug('No data received from WeatherStation')
-                
-                weatherStation.disconnect()
-                time.sleep(10)
+					# Set Prometheus data
+					TEMPERATURE_INDOORS.set(indoor)
+					TEMPERATURE_OUTDOORS.set(outdoor)
+				else:
+					logging.debug('No data received from WeatherStation')
+				
+				weatherStation.disconnect()
+				time.sleep(10)
 
 		
 		except KeyboardInterrupt:
