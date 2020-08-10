@@ -182,8 +182,8 @@ if __name__=="__main__":
 
 	weatherStationMacAddr = None
 
-    start_http_server(addr="0.0.0.0", port=8001)
-	
+	start_http_server(addr="0.0.0.0", port=8001)
+
 	if len(sys.argv) < 2:
 		# No MAC address passed as argument
 		try:
