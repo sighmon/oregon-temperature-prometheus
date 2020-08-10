@@ -159,6 +159,7 @@ class NotificationDelegate(DefaultDelegate):
 		else:
 			# skip other indications/notifications
 			# logging.debug('handle %x = %s', cHandle, formatedData)
+			pass
 	
 	def getData(self):
 			if self._indoorAndOutdoorTemp_type0 is not None:
