@@ -4,6 +4,7 @@ WORKDIR /usr/src
 
 RUN install_packages build-essential \
     bluez \
+    bluez-tools \
     python-dbus \
     python-dev \
     libglib2.0-dev
@@ -14,4 +15,4 @@ RUN pip install \
 
 COPY temperature.py .
 
-CMD ["sudo", "python", "temperature.py"]
+CMD ["python", "temperature.py", "<BLE ADDRESS>"]

@@ -57,7 +57,7 @@ class WeatherStation:
 			self.p.writeCharacteristic(0x001e, "\x02\x00")
 			self.p.writeCharacteristic(0x0021, "\x02\x00")
 			self.p.writeCharacteristic(0x0032, "\x01\x00")
-			logging.debug('Notifications enabled')
+			# logging.debug('Notifications enabled')
 		
 		except BTLEException as err:
 			print(err)
@@ -71,7 +71,7 @@ class WeatherStation:
 			while self.p.waitForNotifications(1.0):
 				# handleNotification() was called
 				continue
-			logging.debug('Notification timeout')
+			# logging.debug('Notification timeout')
 		except:
 			return None
 		
@@ -151,14 +151,14 @@ class NotificationDelegate(DefaultDelegate):
 			if formatedData[0] == '8':
 				# Type1 data packet received
 				self._indoorAndOutdoorTemp_type1 = formatedData
-				logging.debug('indoorAndOutdoorTemp_type1 = %s', formatedData)
+				# logging.debug('indoorAndOutdoorTemp_type1 = %s', formatedData)
 			else:
 				# Type0 data packet received
 				self._indoorAndOutdoorTemp_type0 = formatedData
-				logging.debug('indoorAndOutdoorTemp_type0 = %s', formatedData)
+				# logging.debug('indoorAndOutdoorTemp_type0 = %s', formatedData)
 		else:
 			# skip other indications/notifications
-			logging.debug('handle %x = %s', cHandle, formatedData)
+			# logging.debug('handle %x = %s', cHandle, formatedData)
 	
 	def getData(self):
 			if self._indoorAndOutdoorTemp_type0 is not None:
