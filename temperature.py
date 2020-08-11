@@ -23,6 +23,7 @@ import logging
 import time
 import sqlite3
 from bluepy.btle import *
+from bluepy.btle import BTLEDisconnectError
 from prometheus_client import start_http_server, Gauge
 
 # uncomment the following line to get debug information
@@ -220,6 +221,7 @@ if __name__=="__main__":
 				weatherStation.disconnect()
 				time.sleep(10)
 
-		
+		except BTLEDisconnectError:
+			logging.debug('BTLE Disconnect Error...')
 		except KeyboardInterrupt:
 			logging.debug('Program stopped by user')
