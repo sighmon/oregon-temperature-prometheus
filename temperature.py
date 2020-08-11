@@ -205,23 +205,25 @@ if __name__=="__main__":
 		try:
 			while True:
 				# Attempting to connect to device with MAC address "weatherStationMacAddr"
-				weatherStation = WeatherStation(weatherStationMacAddr)
+				try:
+					weatherStation = WeatherStation(weatherStationMacAddr)
 				
-				if weatherStation.monitorWeatherStation() is not None:
-					# WeatherStation data received
-					indoor = weatherStation.getIndoorTemp()
-					outdoor = weatherStation.getOutdoorTemp()
+					if weatherStation.monitorWeatherStation() is not None:
+						# WeatherStation data received
+						indoor = weatherStation.getIndoorTemp()
+						outdoor = weatherStation.getOutdoorTemp()
 
-					# Set Prometheus data
-					TEMPERATURE_INDOORS.set(indoor)
-					TEMPERATURE_OUTDOORS.set(outdoor)
-				else:
-					logging.debug('No data received from WeatherStation')
+						# Set Prometheus data
+						TEMPERATURE_INDOORS.set(indoor)
+						TEMPERATURE_OUTDOORS.set(outdoor)
+					else:
+						logging.debug('No data received from WeatherStation')
+
+				except BTLEDisconnectError:
+					logging.debug('BTLE Disconnect Error...')
 				
 				weatherStation.disconnect()
 				time.sleep(10)
 
-		except BTLEDisconnectError:
-			logging.debug('BTLE Disconnect Error...')
 		except KeyboardInterrupt:
 			logging.debug('Program stopped by user')
