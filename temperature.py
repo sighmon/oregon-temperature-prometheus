@@ -31,6 +31,10 @@ logging.basicConfig(format='%(asctime)s: %(message)s', level=logging.DEBUG)
 
 WEATHERSTATION_NAME = "IDTW211R" # IDTW213R for RAR218HG
 
+# Temperature range of weatherstation
+UPPER_LIMIT = 60
+LOWER_LIMIT = -20
+
 TEMPERATURE_INDOORS = Gauge('temperature_indoors','Temperature indoors measured (*C)')
 TEMPERATURE_OUTDOORS = Gauge('temperature_outdoors','Temperature outdoors measured (*C)')
 
@@ -213,9 +217,10 @@ if __name__=="__main__":
 						indoor = weatherStation.getIndoorTemp()
 						outdoor = weatherStation.getOutdoorTemp()
 
-						# Set Prometheus data
-						TEMPERATURE_INDOORS.set(indoor)
-						TEMPERATURE_OUTDOORS.set(outdoor)
+						if LOWER_LIMIT <= indoor <= UPPER_LIMIT and LOWER_LIMIT <= outdoor <= UPPER_LIMIT:
+							# Set Prometheus data
+							TEMPERATURE_INDOORS.set(indoor)
+							TEMPERATURE_OUTDOORS.set(outdoor)
 					else:
 						logging.debug('No data received from WeatherStation')
 
