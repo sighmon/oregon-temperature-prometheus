@@ -37,6 +37,7 @@ LOWER_LIMIT = -20
 
 TEMPERATURE_INDOORS = Gauge('temperature_indoors','Temperature indoors measured (*C)')
 TEMPERATURE_OUTDOORS = Gauge('temperature_outdoors','Temperature outdoors measured (*C)')
+BATTERY_LEVEL = Gauge('battery_percentage','Battery percentage (%)')
 
 class WeatherStation:
 	def __init__(self, mac):
@@ -44,6 +45,8 @@ class WeatherStation:
 		try:
 			self.p = Peripheral(mac, ADDR_TYPE_RANDOM)
 			self.p.setDelegate(NotificationDelegate())
+			self.battery_svc = self.p.getServiceByUUID("0000180f-0000-1000-8000-00805f9b34fb")  # Standard Battery Service UUID
+			self.battery_char = self.battery_svc.getCharacteristics("00002a19-0000-1000-8000-00805f9b34fb")[0]  # Battery Level Characteristic UUID
 			logging.debug('WeatherStation connected !')
 		except BTLEException:
 			self.p = 0
@@ -139,6 +142,14 @@ class WeatherStation:
 			return temp
 		else:
 			return None
+
+	def readBatteryLevel(self):
+		if self.battery_char:
+				battery_level = self.battery_char.read()
+				battery_level = ord(battery_level)  # Convert byte to integer
+				logging.debug('Battery level: %d%%', battery_level)
+				return battery_level
+		return None
 			
 	def disconnect(self):
 		self.p.disconnect()
@@ -216,11 +227,13 @@ if __name__=="__main__":
 						# WeatherStation data received
 						indoor = weatherStation.getIndoorTemp()
 						outdoor = weatherStation.getOutdoorTemp()
+						battery_level = weatherStation.readBatteryLevel()
 
 						if LOWER_LIMIT <= indoor <= UPPER_LIMIT and LOWER_LIMIT <= outdoor <= UPPER_LIMIT:
 							# Set Prometheus data
 							TEMPERATURE_INDOORS.set(indoor)
 							TEMPERATURE_OUTDOORS.set(outdoor)
+							BATTERY_LEVEL.set(battery_level)
 					else:
 						logging.debug('No data received from WeatherStation')
 
